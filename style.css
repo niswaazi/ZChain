@@ -1,0 +1,276 @@
+/* Core Styling - Clean & Minimalist Glassmorphism Concept */
+:root {
+    --primary-color: #00b4d8;
+    --success-color: #2a9d8f;
+    --warning-color: #e9c46a;
+    --danger-color: #e63946;
+    --text-main: #f8f9fa;
+    --text-muted: #adb5bd;
+    --glass-bg: rgba(255, 255, 255, 0.06);
+    --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: radial-gradient(circle at 10% 20%, rgb(4, 21, 31) 0%, rgb(11, 44, 61) 90%);
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+}
+
+/* Screen Management */
+.screen {
+    display: none;
+    width: 100%;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.screen.active {
+    display: flex;
+}
+
+/* Glassmorphism Card Layout */
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 40px;
+    width: 100%;
+    max-width: 450px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.glass-card-inside {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 30px;
+    width: 100%;
+}
+
+/* Logo & Text typography */
+.logo {
+    font-size: 2.5rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 10px;
+}
+.logo span { color: var(--primary-color); }
+
+.subtitle {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 30px;
+    line-height: 1.4;
+}
+
+.description {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+}
+
+/* Loading Spinner Simulation */
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    border-top-color: var(--primary-color);
+    animation: spin 1s ease-in-out infinite;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Forms & Inputs */
+.input-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+    color: var(--text-muted);
+}
+
+.input-group input, .input-group select {
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    color: white;
+    outline: none;
+    transition: 0.3s ease;
+}
+
+.input-group input:focus, .input-group select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 10px rgba(0, 180, 216, 0.2);
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+/* Buttons System */
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+.btn-primary { background-color: var(--primary-color); color: #023e8a; }
+.btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+.btn-success { background-color: var(--success-color); color: white; }
+.btn-warning { background-color: var(--warning-color); color: #264653; }
+.btn-danger { background-color: var(--danger-color); color: white; }
+.btn-block { width: 100%; }
+.btn-sm { padding: 6px 12px; font-size: 0.8rem; }
+
+/* Auth Tabs toggle */
+.auth-tabs {
+    display: flex;
+    margin-bottom: 30px;
+    border-bottom: 1px solid var(--glass-border);
+}
+.tab-btn {
+    flex: 1;
+    background: none;
+    border: none;
+    padding: 10px;
+    color: var(--text-muted);
+    font-size: 1rem;
+    cursor: pointer;
+}
+.tab-btn.active {
+    color: white;
+    border-bottom: 2px solid var(--primary-color);
+    font-weight: 600;
+}
+
+/* Dashboard Layout Base */
+#dashboard-screen {
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 0;
+}
+
+.navbar {
+    width: 100%;
+    padding: 20px 40px;
+    background: rgba(11, 44, 61, 0.4);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--glass-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-brand { font-size: 1.5rem; font-weight: 700; }
+.nav-brand span { color: var(--primary-color); }
+
+.dashboard-container {
+    display: flex;
+    width: 100%;
+    height: calc(100vh - 75px);
+}
+
+.sidebar {
+    width: 250px;
+    background: rgba(4, 21, 31, 0.5);
+    border-right: 1px solid var(--glass-border);
+    padding: 30px 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sidebar-btn {
+    width: 100%;
+    padding: 14px 20px;
+    background: none;
+    border: none;
+    border-radius: 10px;
+    color: var(--text-muted);
+    text-align: left;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+.sidebar-btn:hover, .sidebar-btn.active {
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+}
+.sidebar-btn.active { border-left: 4px solid var(--primary-color); }
+
+.content-area {
+    flex: 1;
+    padding: 40px;
+    overflow-y: auto;
+}
+
+.tab-content { display: none; width: 100%; max-width: 700px; }
+.tab-content.active { display: block; }
+
+/* Real-Time Notification System Banner */
+.notification-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.toast {
+    background: rgba(15, 23, 42, 0.9);
+    border-left: 5px solid var(--primary-color);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    backdrop-filter: blur(10px);
+    padding: 16px 20px;
+    border-radius: 4px 10px 10px 4px;
+    color: white;
+    min-width: 300px;
+    font-size: 0.85rem;
+    animation: slideIn 0.3s ease forwards;
+}
+.toast.success { border-left-color: var(--success-color); }
+.toast.warning { border-left-color: var(--warning-color); }
+.toast.danger { border-left-color: var(--danger-color); }
+
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+.hidden { display: none !important; }
+.text-center { text-align: center; }
+.error-text { color: var(--danger-color); margin-top: 15px; font-size: 0.9rem; }    
