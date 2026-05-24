@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Z-Chain Platform - FinTech Syariah Blockchain</title>
+    <title>Z-Chain Platform - FinTech Syariah Blockchain Aceh</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -13,153 +13,241 @@
     <div id="blockchain-check-screen" class="screen active">
         <div class="glass-card text-center">
             <div class="logo">Z-<span>Chain</span></div>
-            <p class="subtitle">Fintech Syariah Berbasis Blockchain untuk Petani & Nelayan Aceh</p>
-            <div class="spinner" id="connection-spinner"></div>
-            <p id="connection-status-text">Memeriksa koneksi ke Server Blockchain...</p>
+            <div class="badge-network">POLYGON MAINNET</div>
+            <p class="subtitle">Platform Transparansi Zakat & Modal Qardhul Hasan Petani-Nelayan Aceh</p>
+            
+            <div class="connection-box">
+                <div class="spinner" id="connection-spinner"></div>
+                <p id="connection-status-text">Membuka enkripsi & memverifikasi node Polygon RPC...</p>
+            </div>
+
             <div id="connection-error-actions" class="hidden">
-                <p class="error-text">⚠️ Server Blockchain Bermasalah atau Tidak Terhubung!</p>
-                <button onclick="simulasikanCekKoneksi()" class="btn btn-primary">Coba Lagi</button>
+                <p class="error-text">⚠️ Gagal terhubung ke RPC Node Polygon Mainnet!</p>
+                <button onclick="simulasikanCekKoneksi()" class="btn btn-primary">Coba Hubungkan Ulang</button>
             </div>
         </div>
     </div>
 
     <div id="auth-screen" class="screen">
         <div class="glass-card">
+            <div class="text-center" style="margin-bottom: 20px;">
+                <div class="logo">Z-<span>Chain</span></div>
+                <p class="description">Silakan masuk untuk mengakses sistem finansial syariah terenkripsi.</p>
+            </div>
+            
             <div class="auth-tabs">
-                <button id="tab-login" class="tab-btn active" onclick="switchAuthTab('login')">Masuk</button>
-                <button id="tab-register" class="tab-btn" onclick="switchAuthTab('register')">Daftar</button>
+                <button id="tab-login" class="tab-btn active" onclick="switchAuthTab('login')">Masuk Akun</button>
+                <button id="tab-register" class="tab-btn" onclick="switchAuthTab('register')">Daftar Baru</button>
             </div>
 
             <form id="login-form" class="auth-form" onsubmit="handleLogin(event)">
-                <h2>Selamat Datang Kembali</h2>
                 <div class="input-group">
-                    <label>Email</label>
-                    <input type="email" id="login-email" placeholder="Masukkan email anda" required>
+                    <label>Alamat Email</label>
+                    <input type="email" id="login-email" placeholder="Contoh: muzaki@zchain.com" required>
                 </div>
                 <div class="input-group">
-                    <label>Password</label>
-                    <input type="password" id="login-password" placeholder="Masukkan password" required>
+                    <label>Password Akun</label>
+                    <input type="password" id="login-password" placeholder="••••••••" required>
                 </div>
-                <button type="submit" class="btn btn-primary btn-block">Masuk Ke Dashboard</button>
+                <div class="info-tip">💡 Tip: Gunakan akun testing <b>donatur@zchain.com</b> dengan password <b>password123</b></div>
+                <button type="submit" class="btn btn-primary btn-block">Masuk Ke Dashboard Secure</button>
             </form>
 
             <form id="register-form" class="auth-form hidden" onsubmit="handleRegister(event)">
-                <h2>Buat Akun Baru</h2>
                 <div class="input-group">
-                    <label>Nama Lengkap</label>
-                    <input type="text" id="reg-nama" placeholder="Nama sesuai KTP" required>
+                    <label>Nama Lengkap (Sesuai KTP)</label>
+                    <input type="text" id="reg-nama" placeholder="Muzaki / Mustahik" required>
                 </div>
                 <div class="input-group">
-                    <label>Email</label>
-                    <input type="email" id="reg-email" placeholder="Contoh: donatur@zchain.com" required>
+                    <label>Alamat Email Aktif</label>
+                    <input type="email" id="reg-email" placeholder="nama@email.com" required>
                 </div>
                 <div class="input-group">
-                    <label>Nomor HP</label>
-                    <input type="text" id="reg-hp" placeholder="Contoh: 0812xxxxxxxx" required>
+                    <label>Nomor HP (WhatsApp)</label>
+                    <input type="text" id="reg-hp" placeholder="08xxxxxxxxxx" required>
                 </div>
                 <div class="input-group">
-                    <label>Password</label>
-                    <input type="password" id="reg-password" placeholder="Buat password aman" required>
+                    <label>Buat Password</label>
+                    <input type="password" id="reg-password" placeholder="Minimal 6 karakter" required>
                 </div>
-                <button type="submit" class="btn btn-primary btn-block">Daftar Sekarang</button>
+                <button type="submit" class="btn btn-primary btn-block">Daftar & Amankan Akun</button>
             </form>
         </div>
     </div>
 
     <div id="dashboard-screen" class="screen">
         <nav class="navbar">
-            <div class="nav-brand">Z-<span>Chain</span> Dashboard</div>
-            <div class="user-profile">
-                <span id="logged-user-name">Pengguna</span>
-                <button onclick="handleLogout()" class="btn btn-sm btn-danger">Keluar</button>
+            <div class="nav-brand">Z-<span>Chain</span> Core Interface</div>
+            <div class="nav-right">
+                <div class="wallet-badge">👛 Node Address: <span id="node-address">0x71C...3A90</span></div>
+                <div class="user-profile">
+                    <span id="logged-user-name">Memuat...</span>
+                    <button onclick="handleLogout()" class="btn btn-sm btn-danger">Keluar</button>
+                </div>
             </div>
         </nav>
 
         <main class="dashboard-container">
             <aside class="sidebar">
-                <button class="sidebar-btn active" onclick="switchTab('donasi')">💰 Menu Donasi</button>
-                <button class="sidebar-btn" onclick="switchTab('qardhul')">🌾 Qardhul Hasan</button>
-                <button class="sidebar-btn" onclick="switchTab('dampak')">📊 Laporan Dampak</button>
+                <div class="sidebar-title">NAVIGASI SISTEM</div>
+                <button class="sidebar-btn active" onclick="switchTab('donasi')">💰 Transaksi Donasi & Zakat</button>
+                <button class="sidebar-btn" onclick="switchTab('qardhul')">🌾 Pengajuan Qardhul Hasan</button>
+                <button class="sidebar-btn" onclick="switchTab('dampak')">📊 Laporan Dampak & Panen</button>
+                
+                <div class="sidebar-stats-box">
+                    <div class="stats-title">POOL DANA ABADI</div>
+                    <div class="stats-value" id="pool-dana-abadi">Rp 128.500.000</div>
+                    <div class="stats-desc">Perputaran dana produktif on-chain.</div>
+                </div>
             </aside>
 
             <section class="content-area">
                 
                 <div id="tab-donasi-content" class="tab-content active">
-                    <div class="glass-card-inside">
-                        <h3>Simulasi Transaksi Digital Donasi</h3>
-                        <p class="description">Zakat, Infak, dan Sedekah tercatat on-chain secara transparan.</p>
-                        
-                        <form onsubmit="handleDonation(event)">
-                            <div class="input-group">
-                                <label>Jenis Donasi</label>
-                                <select id="donasi-jenis">
-                                    <option value="zakat">Zakat (2.5%)</option>
-                                    <option value="infak">Infak</option>
-                                    <option value="sedekah">Sedekah</option>
-                                </select>
+                    <div class="grid-layout-donation">
+                        <div class="glass-card-inside">
+                            <div class="content-header">
+                                <h2>💰 Simulasi Transaksi Digital Donasi</h2>
+                                <p>Dana zakat, infak, dan sedekah dipotong biaya platform 0,5% secara transparan di jaringan pintar (smart contract).</p>
                             </div>
-                            <div class="input-group">
-                                <label>Nominal Donasi (Rp)</label>
-                                <input type="number" id="donasi-nominal" placeholder="Minimal Rp 10.000" required>
+                            
+                            <form onsubmit="handleDonation(event)">
+                                <div class="grid-2">
+                                    <div class="input-group">
+                                        <label>Jenis Kontribusi Syariah</label>
+                                        <select id="donasi-jenis" onchange="hitungKalkulasiDonasi()">
+                                            <option value="Zakat">Zakat Maal / Profesi (2.5%)</option>
+                                            <option value="Infak">Infak Umum</option>
+                                            <option value="Sedekah">Sedekah Produktif</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-group">
+                                        <label>Nominal Pembayaran (Rp)</label>
+                                        <input type="number" id="donasi-nominal" value="1000000" oninput="hitungKalkulasiDonasi()" placeholder="Minimal Rp 10.000" required>
+                                    </div>
+                                </div>
+
+                                <div class="input-group">
+                                    <label>Pilihan Gerbang Pembayaran</label>
+                                    <select id="donasi-metode">
+                                        <option value="BSI VA">Bank Syariah Indonesia (BSI) Virtual Account</option>
+                                        <option value="QRIS Syariah">QRIS Syariah Atjeh</option>
+                                    </select>
+                                </div>
+
+                                <div class="live-calc-box">
+                                    <h4>RINCIAN INTEGRASI TRANSPARANSI:</h4>
+                                    <div class="calc-row"><span>Nominal Kotor:</span> <strong id="calc-kotor">Rp 1.000.000</strong></div>
+                                    <div class="calc-row"><span>Operasional Platform (0.5%):</span> <strong class="text-danger" id="calc-fee">Rp 5.000</strong></div>
+                                    <div class="calc-row underline"><span>Net Masuk Dana Abadi Petani:</span> <strong class="text-success" id="calc-net">Rp 995.000</strong></div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary btn-block">Eksekusi Akad & Catat Ke Blockchain</button>
+                            </form>
+                        </div>
+
+                        <div class="glass-card-inside dynamic-receipt-box" id="receipt-panel">
+                            <div class="receipt-placeholder" id="receipt-placeholder-text">
+                                <span class="receipt-icon">📄</span>
+                                <h4>Belum Ada Transaksi Aktif</h4>
+                                <p>Silakan isi formulir di samping dan klik tombol eksekusi untuk menerbitkan bukti audit riwayat transaksi digital blockchain.</p>
                             </div>
-                            <div class="input-group">
-                                <label>Metode Pembayaran</label>
-                                <select id="donasi-metode">
-                                    <option value="bisa_va">Bank Syariah Indonesia (BSI) VA</option>
-                                    <option value="qris">QRIS Syariah</option>
-                                </select>
+                            <div class="receipt-content hidden" id="receipt-real-content">
+                                <div class="receipt-brand">BUKTI AUDIT DIGITAL Z-CHAIN</div>
+                                <div class="receipt-status-badge">✅ SUCCESS ON-CHAIN</div>
+                                <hr class="dashed-line">
+                                <div class="receipt-row"><span>Waktu Blok:</span> <span id="rec-time">-</span></div>
+                                <div class="receipt-row"><span>Nama Muzaki:</span> <span id="rec-nama">-</span></div>
+                                <div class="receipt-row"><span>Jenis Dana:</span> <span id="rec-jenis">-</span></div>
+                                <div class="receipt-row"><span>Metode:</span> <span id="rec-metode">-</span></div>
+                                <hr class="dashed-line">
+                                <div class="receipt-row"><span>Gross Amount:</span> <span id="rec-gross">-</span></div>
+                                <div class="receipt-row"><span>Fee Platform (0.5%):</span> <span id="rec-fee" class="text-danger">-</span></div>
+                                <div class="receipt-row large"><span>Net Disalurkan:</span> <span id="rec-net" class="text-success">-</span></div>
+                                <hr class="dashed-line">
+                                <div class="receipt-blockchain-meta">
+                                    <label>BLOCKCHAIN TX HASH:</label>
+                                    <div class="hash-code" id="rec-hash">0x00...</div>
+                                    <p class="crypto-note">Data di atas bersifat permanen, anti-manipulasi (immutable), dan dapat diidentifikasi secara publik di seluruh node Ledger Z-Chain.</p>
+                                </div>
                             </div>
-                            <button type="submit" class="btn btn-primary">Proses Pembayaran & Catat ke Blockchain</button>
-                        </form>
+                        </div>
                     </div>
                 </div>
 
                 <div id="tab-qardhul-content" class="tab-content">
                     <div class="glass-card-inside">
-                        <h3>Pengajuan Pembiayaan Qardhul Hasan</h3>
-                        <p class="description">Modal usaha produktif tanpa bunga untuk Petani & Nelayan Mandiri.</p>
+                        <div class="content-header">
+                            <h2>🌾 Pengajuan Pembiayaan Modal Qardhul Hasan</h2>
+                            <p>Sistem pembiayaan kebajikan tanpa bunga dan riba untuk Petani Bawang/Padi dan Nelayan kecil di Provinsi Aceh.</p>
+                        </div>
                         
                         <form onsubmit="handleQardhul(event)">
                             <div class="input-group">
                                 <label>Nomor Induk Kependudukan (NIK Aceh)</label>
-                                <input type="text" id="qardhul-nik" placeholder="Validasi data kependudukan otomatis" required>
+                                <input type="text" id="qardhul-nik" placeholder="Wajib 16 Digit untuk validasi otomatis kependudukan" required>
                             </div>
-                            <div class="input-group">
-                                <label>Jenis Pekerjaan</label>
-                                <select id="qardhul-kerja">
-                                    <option value="petani">Petani Bawang/Padi</option>
-                                    <option value="nelayan">Nelayan Perahu Motor</option>
-                                </select>
+
+                            <div class="grid-2">
+                                <div class="input-group">
+                                    <label>Sektor Kluster Pekerjaan</label>
+                                    <select id="qardhul-kerja">
+                                        <option value="Petani Bawang Merah">Petani Bawang Merah (Pidie/A.Besar)</option>
+                                        <option value="Petani Padi Organik">Petani Padi Organik</option>
+                                        <option value="Nelayan Perahu Motor">Nelayan Perahu Motor (Banda Aceh/Idie)</option>
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <label>Nominal Pengajuan Modal Kerja</label>
+                                    <input type="number" id="qardhul-nominal" placeholder="Maksimal Rp 10.000.000" required>
+                                </div>
                             </div>
-                            <div class="input-group">
-                                <label>Nominal Ajuan Modal (Rp)</label>
-                                <input type="number" id="qardhul-nominal" placeholder="Contoh: 5000000" required>
+                            
+                            <div class="info-alert">
+                                🔒 <b>Privasi Terjaga:</b> Jika verifikasi sukses, sistem backend akan menyamarkan identitas asli Anda di Blockchain menggunakan modul anonimitas demi menjaga martabat penerima bantuan.
                             </div>
-                            <button type="submit" class="btn btn-success">Ajukan Verifikasi Data</button>
+
+                            <button type="submit" class="btn btn-success btn-block">Ajukan Berkas & Mulai Validasi Smart Contract</button>
                         </form>
                     </div>
                 </div>
 
                 <div id="tab-dampak-content" class="tab-content">
                     <div class="glass-card-inside">
-                        <h3>Laporan Hasil Panen & Siklus Abadi</h3>
-                        <p class="description">Penerima manfaat mengirim bukti transparansi berupa foto/data panen.</p>
+                        <div class="content-header">
+                            <h2>📊 Laporan Siklus Hasil Panen & Zakat Usaha</h2>
+                            <p>Sebagai bentuk transparansi, mustahik melaporkan hasil panen. Keuntungan bersih wajib dipotong zakat hasil usaha sebesar 2.5% untuk dikembalikan ke Pool Dana Abadi.</p>
+                        </div>
                         
                         <form onsubmit="handleImpactReport(event)">
                             <div class="input-group">
-                                <label>Hasil Panen / Tangkapan (Kg)</label>
-                                <input type="text" id="report-panen" placeholder="Contoh: 500 Kg Padi / Bawang Bersih" required>
+                                <label>Deskripsi Hasil Panen / Tangkapan</label>
+                                <input type="text" id="report-panen" placeholder="Contoh: Berhasil panen 450 Kg Bawang Merah Kualitas Super" required>
                             </div>
+
                             <div class="input-group">
-                                <label>Dokumentasi Kegiatan (Foto URL / Simulasi)</label>
-                                <input type="text" id="report-foto" value="https://zchain.aceh.go.id/storage/panen_raya.jpg" readonly>
+                                <label>Estimasi Pendapatan Bersih (Rp)</label>
+                                <input type="number" id="report-pendapatan" value="4000000" oninput="hitungZakatUsaha()" placeholder="Masukkan total pendapatan bersih" required>
                             </div>
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="report-zakat-return" checked>
-                                <label for="report-zakat-return">Potong Zakat Usaha Otomatis 2.5% untuk Pool Dana Abadi Z-Chain</label>
+
+                            <div class="live-calc-box">
+                                <h4>SIKLUS ABADI BERKELANJUTAN (ZAKAT RETURN):</h4>
+                                <div class="calc-row"><span>Potongan Zakat Hasil Usaha (2.5%):</span> <strong class="text-warning" id="calc-zakat-return">Rp 100.000</strong></div>
+                                <p class="description" style="margin-top: 5px; font-size: 0.75rem;">Dana 2.5% ini otomatis dialihkan kembali ke kas Pool Dana Abadi Z-Chain agar bisa dipinjamkan kembali ke petani/nelayan lain yang membutuhkan bantuan modal.</p>
                             </div>
-                            <button type="submit" class="btn btn-warning">Kirim & Publikasikan Laporan</button>
+
+                            <button type="submit" class="btn btn-warning btn-block">Kirim Laporan & Otomatisasi Transaksi Zakat Return</button>
                         </form>
+                    </div>
+                </div>
+
+                <div class="blockchain-inspector">
+                    <div class="inspector-header">
+                        <h3>🔗 REAL-TIME BLOCKCHAIN LOGS INSPECTOR (METADATA ON-CHAIN)</h3>
+                        <span class="pulse-icon"></span>
+                    </div>
+                    <div class="logs-container" id="logs-container">
+                        <div class="log-entry system">[SYSTEM]: Node initialized. Awaiting user transaction triggers...</div>
                     </div>
                 </div>
 
