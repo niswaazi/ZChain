@@ -10,9 +10,12 @@
 
     <div id="notification-container" class="notification-container"></div>
 
+    <!-- PRE-CONNECTION CHECK SCREEN (SCREEN PEMUTUS) -->
     <div id="blockchain-check-screen" class="screen active">
         <div class="glass-card text-center">
-            <div class="logo">Z-<span>Chain</span></div>
+            <div class="logo-container">
+                <img src="logo.jpg" alt="Z-Chain Logo" class="app-logo">
+            </div>
             <div class="badge-network">POLYGON MAINNET</div>
             <p class="subtitle">Platform Transparansi Zakat & Modal Qardhul Hasan Petani-Nelayan Aceh</p>
             
@@ -28,10 +31,13 @@
         </div>
     </div>
 
+    <!-- AUTHENTICATION SCREEN (SINGLE GLASSMORPHIC CARD BOX) -->
     <div id="auth-screen" class="screen">
         <div class="glass-card">
             <div class="text-center" style="margin-bottom: 20px;">
-                <div class="logo">Z-<span>Chain</span></div>
+                <div class="logo-container">
+                    <img src="logo.jpg" alt="Z-Chain Logo" class="app-logo-medium">
+                </div>
                 <p class="description">Silakan masuk untuk mengakses sistem finansial syariah terenkripsi.</p>
             </div>
             
@@ -43,7 +49,7 @@
             <form id="login-form" class="auth-form" onsubmit="handleLogin(event)">
                 <div class="input-group">
                     <label>Alamat Email</label>
-                    <input type="email" id="login-email" placeholder="Contoh: muzaki@zchain.com" required>
+                    <input type="email" id="login-email" placeholder="Contoh: donatur@zchain.com" required>
                 </div>
                 <div class="input-group">
                     <label>Password Akun</label>
@@ -75,9 +81,13 @@
         </div>
     </div>
 
+    <!-- MAIN CORE DASHBOARD SCREEN -->
     <div id="dashboard-screen" class="screen">
         <nav class="navbar">
-            <div class="nav-brand">Z-<span>Chain</span> Core Interface</div>
+            <div class="nav-brand-container">
+                <img src="logo.jpg" alt="Z-Chain Logo" class="nav-logo">
+                <div class="nav-brand">Z-Chain Core Interface</div>
+            </div>
             <div class="nav-right">
                 <div class="wallet-badge">👛 Node Address: <span id="node-address">0x71C...3A90</span></div>
                 <div class="user-profile">
@@ -103,6 +113,7 @@
 
             <section class="content-area">
                 
+                <!-- TAB 1: TRANSAKSI DONASI -->
                 <div id="tab-donasi-content" class="tab-content active">
                     <div class="grid-layout-donation">
                         <div class="glass-card-inside">
@@ -175,6 +186,7 @@
                     </div>
                 </div>
 
+                <!-- TAB 2: PENGAJUAN QARDHUL HASAN -->
                 <div id="tab-qardhul-content" class="tab-content">
                     <div class="glass-card-inside">
                         <div class="content-header">
@@ -212,6 +224,7 @@
                     </div>
                 </div>
 
+                <!-- TAB 3: LAPORAN DAMPAK -->
                 <div id="tab-dampak-content" class="tab-content">
                     <div class="glass-card-inside">
                         <div class="content-header">
@@ -241,6 +254,7 @@
                     </div>
                 </div>
 
+                <!-- BLOCKCHAIN LOGS SYSTEM INSPECTOR -->
                 <div class="blockchain-inspector">
                     <div class="inspector-header">
                         <h3>🔗 REAL-TIME BLOCKCHAIN LOGS INSPECTOR (METADATA ON-CHAIN)</h3>

@@ -1,3 +1,4 @@
+// INITIALIZE DATABASE EMULATION TO LOCALSTORAGE
 if (!localStorage.getItem("zchain_users")) {
     const database_users = [
         { email: "donatur@zchain.com", password: "password123", nama: "Muzaki Atjeh" }
@@ -131,9 +132,6 @@ function switchTab(tabId) {
     pushLog("UI INTERACTION", `Navigasi dialihkan ke Tab: ${tabId.toUpperCase()}`, "system");
 }
 
-// ==========================================
-// ALUR LOGIKA INFORMASI SETELAH DONASI (Z-CHAIN COMPLIANT)
-// ==========================================
 function handleDonation(e) {
     e.preventDefault();
     const jenis = document.getElementById("donasi-jenis").value;
@@ -148,19 +146,15 @@ function handleDonation(e) {
     const fee = nominal * 0.005;
     const net = nominal - fee;
 
-    // 1. Tambah kas ke Pool abadi
     let currentPool = parseFloat(localStorage.getItem("zchain_pool"));
     localStorage.setItem("zchain_pool", (currentPool + net).toString());
     updatePoolDisplay();
 
-    // 2. Generate Hash Enkripsi Unik
     const txHash = "0x" + [...Array(40)].map(() => Math.floor(Math.random()*16).toString(16)).join("");
     const waktuSkrg = new Date().toLocaleString("id-ID");
 
-    // 3. Tampilkan Banner Notifikasi Sukses Masuk Sistem
     showToast("Transaksi Berhasil! Hash Terekam on-chain.", "success");
     
-    // 4. Update Cetak Kuitansi Riwayat Transaksi (INFORMASI SETELAH DONASI)
     document.getElementById("receipt-placeholder-text").classList.add("hidden");
     document.getElementById("receipt-real-content").classList.remove("hidden");
     
@@ -173,7 +167,6 @@ function handleDonation(e) {
     document.getElementById("rec-net").innerText = "Rp " + net.toLocaleString("id-ID");
     document.getElementById("rec-hash").innerText = txHash;
 
-    // 5. Dorong Informasi ke Sistem Log & Audit Terbuka
     pushLog("SMART CONTRACT CALL", `Event [donation] triggered via ${metode}. Gross: Rp ${nominal.toLocaleString()}. Net: Rp ${net.toLocaleString()}. Fee: Rp ${fee.toLocaleString()}`, "success");
     pushLog("BLOCKCHAIN LOG", `Block #3829411 Mined & Confirmed. Transaction Hash: ${txHash}`, "success");
 }
