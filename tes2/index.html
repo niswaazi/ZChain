@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Z-Chain — Syariah Zakat Platform Aceh</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="notification-container" class="notification-container"></div>
+
+<!-- ============================================================
+     SCREEN 1: PRE-CONNECTION CHECK
+     ============================================================ -->
+<div id="blockchain-check-screen" class="screen active">
+  <div class="glass-card text-center">
+    <div class="logo-container">
+      <img src="logo.jpg" alt="Z-Chain Logo" class="app-logo">
+    </div>
+    <div class="badge-network">POLYGON MAINNET</div>
+    <p class="subtitle">Platform Transparansi Zakat & Modal Qardhul Hasan<br>Petani-Nelayan Aceh</p>
+    <div class="connection-box">
+      <div class="spinner" id="connection-spinner"></div>
+      <p id="connection-status-text">Membuka enkripsi & memverifikasi node Polygon RPC...</p>
+    </div>
+    <div id="connection-error-actions" class="hidden">
+      <p class="error-text">⚠️ Gagal terhubung ke RPC Node Polygon Mainnet!</p>
+      <button onclick="simulasikanCekKoneksi()" class="btn btn-primary">Coba Hubungkan Ulang</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SCREEN 2: AUTH
+     ============================================================ -->
+<div id="auth-screen" class="screen">
+  <div class="glass-card">
+    <div class="text-center" style="margin-bottom:18px">
+      <div class="logo-container">
+        <img src="logo.jpg" alt="Z-Chain Logo" class="app-logo-medium">
+      </div>
+      <p class="description">Silakan masuk untuk mengakses sistem finansial syariah terenkripsi.</p>
+    </div>
+
+    <div class="auth-tabs">
+      <button id="tab-login"    class="tab-btn active" onclick="switchAuthTab('login')">Masuk Akun</button>
+      <button id="tab-register" class="tab-btn"        onclick="switchAuthTab('register')">Daftar Baru</button>
+    </div>
+
+    <!-- LOGIN -->
+    <form id="login-form" class="auth-form" onsubmit="handleLogin(event)">
+      <div class="input-group">
+        <label>Alamat Email</label>
+        <input type="email" id="login-email" placeholder="email@domain.com" required>
+      </div>
+      <div class="input-group">
+        <label>Password</label>
+        <input type="password" id="login-password" placeholder="••••••••" required>
+      </div>
+      <div class="info-tip">
+        💡 <b>Akun Testing:</b><br>
+        👤 <b>donatur@zchain.com</b> / password123<br>
+        🌾 <b>mustahik@zchain.com</b> / password123<br>
+        🛡️ <b>admin@zchain.com</b> / admin123<br>
+        🤝 <b>mitra@zchain.com</b> / mitra123
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Masuk ke Dashboard</button>
+      <button type="button" onclick="handleResetTesting()" class="btn btn-block" style="margin-top:9px;background:#f1f5f9;color:#475569;border:1px solid #cbd5e1;font-size:0.78rem;">🔄 Reset Data Testing</button>
+    </form>
+
+    <!-- REGISTER -->
+    <form id="register-form" class="auth-form hidden" onsubmit="handleRegister(event)">
+      <div class="input-group">
+        <label>Nama Lengkap (Sesuai KTP)</label>
+        <input type="text" id="reg-nama" placeholder="Nama lengkap Anda" required>
+      </div>
+      <div class="input-group">
+        <label>Alamat Email Aktif</label>
+        <input type="email" id="reg-email" placeholder="nama@email.com" required>
+      </div>
+      <div class="input-group">
+        <label>Nomor HP (WhatsApp)</label>
+        <input type="text" id="reg-hp" placeholder="08xxxxxxxxxx" required>
+      </div>
+      <div class="input-group">
+        <label>Password</label>
+        <input type="password" id="reg-password" placeholder="Minimal 6 karakter" required>
+      </div>
+      <div class="input-group">
+        <label>Daftar Sebagai</label>
+        <select id="reg-role">
+          <option value="donatur">Donatur (Muzaki) — Ingin Berdonasi</option>
+          <option value="mustahik">Mustahik — Petani / Nelayan Penerima Bantuan</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Daftar & Amankan Akun</button>
+    </form>
+  </div>
+</div>
+
+<!-- ============================================================
+     SCREEN 3: DASHBOARD DONATUR
+     ============================================================ -->
+<div id="dashboard-donatur" class="screen">
+  <nav class="navbar">
+    <div class="nav-brand-container">
+      <img src="logo.jpg" alt="" class="nav-logo">
+      <span class="nav-brand">Z-Chain <span class="role-badge role-donatur">DONATUR</span></span>
+    </div>
+    <div class="nav-right">
+      <span class="wallet-badge">👛 0x71C...3A90</span>
+      <div class="user-profile">
+        <span id="donatur-user-name">—</span>
+        <button onclick="handleLogout()" class="btn btn-sm btn-danger">Keluar</button>
+      </div>
+    </div>
+  </nav>
+  <div class="dashboard-container">
+    <aside class="sidebar">
+      <p class="sidebar-title">🏠 Menu Donatur</p>
+      <button class="sidebar-btn active" onclick="switchTab('donasi',this)">💰 Transaksi Donasi</button>
+      <button class="sidebar-btn"       onclick="switchTab('riwayat-donasi',this)">📜 Riwayat Donasi</button>
+      <button class="sidebar-btn"       onclick="switchTab('tracking-dampak',this)">🔍 Tracking Transparansi</button>
+      <div class="sidebar-stats-box">
+        <p class="stats-title">Pool Dana Abadi</p>
+        <p class="stats-value" id="pool-donatur">Rp 128.500.000</p>
+        <p class="stats-desc">Dana produktif on-chain</p>
+      </div>
+    </aside>
+    <section class="content-area">
+
+      <!-- TAB: DONASI -->
+      <div id="tab-donasi-content" class="tab-content active">
+        <div class="content-header">
+          <h2>💰 Transaksi Donasi & Zakat</h2>
+          <p>Dana zakat, infak, dan sedekah dipotong biaya platform 0,5% secara transparan via smart contract.</p>
+        </div>
+        <div class="grid-layout-donation">
+          <!-- FORM -->
+          <div class="glass-card-inside">
+            <form onsubmit="handleDonation(event)">
+              <div class="grid-2">
+                <div class="input-group">
+                  <label>Jenis Kontribusi</label>
+                  <select id="donasi-jenis" onchange="hitungKalkulasiDonasi()">
+                    <option value="Zakat">Zakat Maal / Profesi</option>
+                    <option value="Infak">Infak Umum</option>
+                    <option value="Sedekah">Sedekah Bebas</option>
+                  </select>
+                </div>
+                <div class="input-group">
+                  <label>Nominal (Rp)</label>
+                  <input type="number" id="donasi-nominal" value="1000000" oninput="hitungKalkulasiDonasi()" required>
+                </div>
+              </div>
+              <div class="input-group">
+                <label>Metode Pembayaran</label>
+                <select id="donasi-metode">
+                  <option value="BSI VA">BSI Virtual Account</option>
+                  <option value="QRIS Syariah">QRIS Syariah Atjeh</option>
+                  <option value="Transfer Syariah">Transfer Bank Syariah</option>
+                </select>
+              </div>
+              <div class="live-calc-box">
+                <h4>Rincian Transparansi</h4>
+                <div class="calc-row"><span>Nominal Kotor</span><strong id="calc-kotor">Rp 1.000.000</strong></div>
+                <div class="calc-row"><span>Operasional Platform (0.5%)</span><strong class="text-danger" id="calc-fee">Rp 5.000</strong></div>
+                <div class="calc-row underline"><span>Net ke Pool Dana Abadi</span><strong class="text-success" id="calc-net">Rp 995.000</strong></div>
+              </div>
+              <button type="submit" class="btn btn-primary btn-block">Eksekusi Akad → Catat ke Blockchain</button>
+            </form>
+          </div>
+          <!-- KUITANSI -->
+          <div class="glass-card-inside dynamic-receipt-box">
+            <div class="receipt-placeholder" id="receipt-placeholder-text">
+              <span class="receipt-icon">📄</span>
+              <h4>Belum Ada Transaksi</h4>
+              <p>Isi formulir dan klik Eksekusi untuk menerbitkan bukti audit digital blockchain.</p>
+            </div>
+            <div class="receipt-content hidden" id="receipt-real-content">
+              <p class="receipt-brand">BUKTI AUDIT DIGITAL Z-CHAIN</p>
+              <div class="receipt-status-badge">✅ SUCCESS ON-CHAIN</div>
+              <hr class="dashed-line">
+              <div class="receipt-row"><span>Waktu Blok</span><span id="rec-time">—</span></div>
+              <div class="receipt-row"><span>Nama Muzaki</span><span id="rec-nama">—</span></div>
+              <div class="receipt-row"><span>Jenis Dana</span><span id="rec-jenis">—</span></div>
+              <div class="receipt-row"><span>Metode</span><span id="rec-metode">—</span></div>
+              <hr class="dashed-line">
+              <div class="receipt-row"><span>Gross Amount</span><span id="rec-gross">—</span></div>
+              <div class="receipt-row"><span>Fee (0.5%)</span><span id="rec-fee" class="text-danger">—</span></div>
+              <div class="receipt-row large"><span>Net Disalurkan</span><span id="rec-net" class="text-success">—</span></div>
+              <hr class="dashed-line">
+              <div class="receipt-blockchain-meta">
+                <label>Blockchain TX Hash</label>
+                <div class="hash-code" id="rec-hash">0x00...</div>
+                <p class="crypto-note">Data bersifat permanen, immutable, dan teridentifikasi di seluruh node Ledger Z-Chain.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="blockchain-inspector">
+          <div class="inspector-header">
+            <h3>🔗 Real-Time Blockchain Logs Inspector</h3>
+            <span class="pulse-icon"></span>
+          </div>
+          <div class="logs-container" id="logs-donatur">
+            <div class="log-entry system">[SYSTEM]: Donatur node initialized.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: RIWAYAT DONASI -->
+      <div id="tab-riwayat-donasi-content" class="tab-content">
+        <div class="content-header">
+          <h2>📜 Riwayat Donasi Saya</h2>
+          <p>Rekaman seluruh transaksi donasi yang telah Anda lakukan, tersimpan permanen di blockchain.</p>
+        </div>
+        <div id="riwayat-donasi-list"><div class="empty-state"><span style="font-size:2rem">📭</span><p>Belum ada riwayat donasi.</p></div></div>
+      </div>
+
+      <!-- TAB: TRACKING TRANSPARANSI -->
+      <div id="tab-tracking-dampak-content" class="tab-content">
+        <div class="content-header">
+          <h2>🔍 Tracking Transparansi Dana</h2>
+          <p>Pantau bagaimana dana Anda digunakan oleh mustahik di lapangan secara real-time.</p>
+        </div>
+        <div class="transparency-stats">
+          <div class="stat-card"><div class="stat-icon">💰</div><p class="stat-label">Total Dana Masuk</p><p class="stat-value text-success" id="track-masuk">Rp 0</p></div>
+          <div class="stat-card"><div class="stat-icon">🌾</div><p class="stat-label">Total Disalurkan</p><p class="stat-value text-warning" id="track-keluar">Rp 0</p></div>
+          <div class="stat-card"><div class="stat-icon">♻️</div><p class="stat-label">Zakat Return</p><p class="stat-value text-success" id="track-return">Rp 0</p></div>
+        </div>
+        <div class="glass-card-inside">
+          <p style="font-size:0.72rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:14px;">Laporan Dampak Terkini dari Mustahik</p>
+          <div id="dampak-publik-list"><div class="empty-state"><p>Belum ada laporan dampak.</p></div></div>
+        </div>
+      </div>
+
+    </section>
+  </div>
+</div>
+
+<!-- ============================================================
+     SCREEN 4: DASHBOARD MUSTAHIK
+     ============================================================ -->
+<div id="dashboard-mustahik" class="screen">
+  <nav class="navbar">
+    <div class="nav-brand-container">
+      <img src="logo.jpg" alt="" class="nav-logo">
+      <span class="nav-brand">Z-Chain <span class="role-badge role-mustahik">MUSTAHIK</span></span>
+    </div>
+    <div class="nav-right">
+      <span class="wallet-badge">🔒 Identitas Terenkripsi</span>
+      <div class="user-profile">
+        <span id="mustahik-user-name">—</span>
+        <button onclick="handleLogout()" class="btn btn-sm btn-danger">Keluar</button>
+      </div>
+    </div>
+  </nav>
+  <div class="dashboard-container">
+    <aside class="sidebar">
+      <p class="sidebar-title">Menu Mustahik</p>
+      <button class="sidebar-btn active" onclick="switchTab('qardhul',this)">🌾 Pengajuan Qardhul Hasan</button>
+      <button class="sidebar-btn"       onclick="switchTab('status-pengajuan',this)">📋 Status Pengajuan</button>
+      <button class="sidebar-btn"       onclick="switchTab('dampak',this)">📊 Laporan Dampak & Panen</button>
+      <div class="sidebar-stats-box">
+        <p class="stats-title">Pool Dana Abadi</p>
+        <p class="stats-value" id="pool-mustahik">Rp 128.500.000</p>
+        <p class="stats-desc">Saldo dana bergulir tersedia</p>
+      </div>
+    </aside>
+    <section class="content-area">
+
+      <!-- TAB: QARDHUL HASAN -->
+      <div id="tab-qardhul-content" class="tab-content active">
+        <div class="content-header">
+          <h2>🌾 Pengajuan Modal Qardhul Hasan</h2>
+          <p>Pembiayaan kebajikan tanpa bunga dan riba untuk Petani dan Nelayan kecil di Provinsi Aceh.</p>
+        </div>
+        <div class="glass-card-inside">
+          <form onsubmit="handleQardhul(event)">
+            <div class="input-group">
+              <label>Nomor Induk Kependudukan (NIK — 16 Digit)</label>
+              <input type="text" id="qardhul-nik" placeholder="Wajib 16 digit angka" required>
+            </div>
+            <div class="grid-2">
+              <div class="input-group">
+                <label>Sektor Kluster Pekerjaan</label>
+                <select id="qardhul-kerja">
+                  <option value="Petani Bawang Merah">Petani Bawang Merah (Pidie/A.Besar)</option>
+                  <option value="Petani Padi Organik">Petani Padi Organik</option>
+                  <option value="Nelayan Perahu Motor">Nelayan Perahu Motor (Banda Aceh)</option>
+                  <option value="Petani Kopi Gayo">Petani Kopi Gayo (Aceh Tengah)</option>
+                  <option value="Nelayan Tangkap Tradisional">Nelayan Tangkap Tradisional</option>
+                </select>
+              </div>
+              <div class="input-group">
+                <label>Nominal Pengajuan (Rp)</label>
+                <input type="number" id="qardhul-nominal" placeholder="Maks. Rp 10.000.000" required>
+              </div>
+            </div>
+            <div class="input-group">
+              <label>Rencana Penggunaan Dana</label>
+              <input type="text" id="qardhul-deskripsi" placeholder="Contoh: Modal beli bibit padi organik 2 hektar" required>
+            </div>
+            <div class="info-alert">🔒 <b>Privasi Terjaga:</b> Identitas asli Anda akan disamarkan di blockchain menggunakan modul anonimitas platform.</div>
+            <button type="submit" class="btn btn-success btn-block">Ajukan Berkas & Validasi Smart Contract</button>
+          </form>
+        </div>
+        <div class="blockchain-inspector">
+          <div class="inspector-header">
+            <h3>🔗 Real-Time Blockchain Logs Inspector</h3>
+            <span class="pulse-icon"></span>
+          </div>
+          <div class="logs-container" id="logs-mustahik">
+            <div class="log-entry system">[SYSTEM]: Mustahik node initialized.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: STATUS PENGAJUAN -->
+      <div id="tab-status-pengajuan-content" class="tab-content">
+        <div class="content-header">
+          <h2>📋 Status Pengajuan Saya</h2>
+          <p>Pantau perkembangan verifikasi dan persetujuan pengajuan modal Anda.</p>
+        </div>
+        <div id="status-pengajuan-list"><div class="empty-state"><span style="font-size:2rem">📬</span><p>Belum ada pengajuan yang tercatat.</p></div></div>
+      </div>
+
+      <!-- TAB: LAPORAN DAMPAK -->
+      <div id="tab-dampak-content" class="tab-content">
+        <div class="content-header">
+          <h2>📊 Laporan Dampak & Zakat Usaha</h2>
+          <p>Laporkan hasil panen. Keuntungan bersih wajib dipotong zakat 2.5% yang akan dikembalikan ke Pool Dana Abadi.</p>
+        </div>
+        <div class="glass-card-inside">
+          <form onsubmit="handleImpactReport(event)">
+            <div class="input-group">
+              <label>Deskripsi Hasil Panen / Tangkapan</label>
+              <input type="text" id="report-panen" placeholder="Contoh: Berhasil panen 450 Kg Bawang Merah Kualitas Super" required>
+            </div>
+            <div class="grid-2">
+              <div class="input-group">
+                <label>Total Tonase Hasil (Kg)</label>
+                <input type="number" id="report-tonase" placeholder="Contoh: 450" required>
+              </div>
+              <div class="input-group">
+                <label>Pendapatan Bersih (Rp)</label>
+                <input type="number" id="report-pendapatan" value="4000000" oninput="hitungZakatUsaha()" required>
+              </div>
+            </div>
+            <div class="live-calc-box">
+              <h4>Zakat Return — Siklus Abadi Berkelanjutan</h4>
+              <div class="calc-row"><span>Pendapatan Bersih</span><strong id="calc-pendapatan-bersih">Rp 4.000.000</strong></div>
+              <div class="calc-row underline"><span>Zakat Usaha (2.5%) → Kembali ke Pool</span><strong class="text-warning" id="calc-zakat-return">Rp 100.000</strong></div>
+            </div>
+            <button type="submit" class="btn btn-warning btn-block">Kirim Laporan & Eksekusi Zakat Return</button>
+          </form>
+        </div>
+      </div>
+
+    </section>
+  </div>
+</div>
+
+<!-- ============================================================
+     SCREEN 5: DASHBOARD ADMIN
+     ============================================================ -->
+<div id="dashboard-admin" class="screen">
+  <nav class="navbar">
+    <div class="nav-brand-container">
+      <img src="logo.jpg" alt="" class="nav-logo">
+      <span class="nav-brand">Z-Chain <span class="role-badge role-admin">ADMIN</span></span>
+    </div>
+    <div class="nav-right">
+      <span class="wallet-badge">🛡️ Akses Admin Terverifikasi</span>
+      <div class="user-profile">
+        <span id="admin-user-name">Admin</span>
+        <button onclick="handleLogout()" class="btn btn-sm btn-danger">Keluar</button>
+      </div>
+    </div>
+  </nav>
+  <div class="dashboard-container">
+    <aside class="sidebar">
+      <p class="sidebar-title">Menu Admin</p>
+      <button class="sidebar-btn active" onclick="switchTab('admin-overview',this)">📊 Ringkasan Sistem</button>
+      <button class="sidebar-btn"       onclick="switchTab('admin-antrian',this)">📋 Antrean Permohonan</button>
+      <button class="sidebar-btn"       onclick="switchTab('admin-donasi',this)">💰 Rekap Donasi</button>
+      <button class="sidebar-btn"       onclick="switchTab('admin-laporan',this)">📈 Laporan Dampak</button>
+      <div class="sidebar-stats-box">
+        <p class="stats-title">Pool Dana Abadi</p>
+        <p class="stats-value" id="pool-admin">Rp 128.500.000</p>
+        <p class="stats-desc">Saldo kas bersama real-time</p>
+      </div>
+    </aside>
+    <section class="content-area">
+
+      <!-- TAB: RINGKASAN -->
+      <div id="tab-admin-overview-content" class="tab-content active">
+        <div class="content-header">
+          <h2>📊 Ringkasan Operasional Sistem</h2>
+          <p>Monitoring real-time seluruh aktivitas platform Z-Chain.</p>
+        </div>
+        <div class="transparency-stats">
+          <div class="stat-card"><div class="stat-icon">👥</div><p class="stat-label">Total Pengguna</p><p class="stat-value" id="admin-stat-users">4</p></div>
+          <div class="stat-card"><div class="stat-icon">💰</div><p class="stat-label">Total Donasi</p><p class="stat-value text-success" id="admin-stat-donasi">Rp 0</p></div>
+          <div class="stat-card"><div class="stat-icon">⏳</div><p class="stat-label">Menunggu Verifikasi</p><p class="stat-value text-warning" id="admin-stat-pending">0</p></div>
+          <div class="stat-card"><div class="stat-icon">✅</div><p class="stat-label">Modal Disalurkan</p><p class="stat-value text-success" id="admin-stat-disalurkan">Rp 0</p></div>
+        </div>
+        <div class="glass-card-inside">
+          <p style="font-size:0.72rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:14px;">📌 Aktivitas Terbaru</p>
+          <div id="admin-activity-log" style="max-height:240px;overflow-y:auto;">
+            <div class="empty-state"><p>Belum ada aktivitas.</p></div>
+          </div>
+        </div>
+        <div class="blockchain-inspector">
+          <div class="inspector-header">
+            <h3>🔗 Blockchain Logs — Admin View</h3>
+            <span class="pulse-icon"></span>
+          </div>
+          <div class="logs-container" id="logs-admin">
+            <div class="log-entry system">[ADMIN]: Full audit trail active.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: ANTREAN PERMOHONAN -->
+      <div id="tab-admin-antrian-content" class="tab-content">
+        <div class="content-header">
+          <h2>📋 Antrean Permohonan Qardhul Hasan</h2>
+          <p>Verifikasi permohonan modal dari mustahik. Setujui atau tolak berdasarkan kelayakan data kependudukan.</p>
+        </div>
+        <div id="antrian-list"><div class="empty-state"><span style="font-size:2rem">📥</span><p>Tidak ada antrean. Semua permohonan telah diproses.</p></div></div>
+      </div>
+
+      <!-- TAB: REKAP DONASI -->
+      <div id="tab-admin-donasi-content" class="tab-content">
+        <div class="content-header">
+          <h2>💰 Rekap Seluruh Transaksi Donasi</h2>
+          <p>Riwayat lengkap semua donasi yang masuk ke Pool Dana Abadi Z-Chain.</p>
+        </div>
+        <div id="admin-donasi-list"><div class="empty-state"><p>Belum ada donasi.</p></div></div>
+      </div>
+
+      <!-- TAB: LAPORAN DAMPAK ADMIN -->
+      <div id="tab-admin-laporan-content" class="tab-content">
+        <div class="content-header">
+          <h2>📈 Laporan Dampak Seluruh Mustahik</h2>
+          <p>Rekap hasil panen dan zakat return dari seluruh mustahik yang telah menerima modal.</p>
+        </div>
+        <div id="admin-laporan-list"><div class="empty-state"><p>Belum ada laporan dampak.</p></div></div>
+      </div>
+
+    </section>
+  </div>
+</div>
+
+<!-- ============================================================
+     SCREEN 6: DASHBOARD MITRA
+     ============================================================ -->
+<div id="dashboard-mitra" class="screen">
+  <nav class="navbar">
+    <div class="nav-brand-container">
+      <img src="logo.jpg" alt="" class="nav-logo">
+      <span class="nav-brand">Z-Chain <span class="role-badge role-mitra">MITRA</span></span>
+    </div>
+    <div class="nav-right">
+      <span class="wallet-badge">🤝 Lembaga Amil / Koperasi</span>
+      <div class="user-profile">
+        <span id="mitra-user-name">Mitra</span>
+        <button onclick="handleLogout()" class="btn btn-sm btn-danger">Keluar</button>
+      </div>
+    </div>
+  </nav>
+  <div class="dashboard-container">
+    <aside class="sidebar">
+      <p class="sidebar-title">Menu Mitra</p>
+      <button class="sidebar-btn active" onclick="switchTab('mitra-monitoring',this)">📈 Monitoring Produktivitas</button>
+      <button class="sidebar-btn"       onclick="switchTab('mitra-mustahik',this)">👥 Data Mustahik Binaan</button>
+      <button class="sidebar-btn"       onclick="switchTab('mitra-zakat',this)">♻️ Kepatuhan Zakat Return</button>
+      <div class="sidebar-stats-box">
+        <p class="stats-title">Pool Dana Abadi</p>
+        <p class="stats-value" id="pool-mitra">Rp 128.500.000</p>
+        <p class="stats-desc">Saldo kas bersama real-time</p>
+      </div>
+    </aside>
+    <section class="content-area">
+
+      <!-- TAB: MONITORING -->
+      <div id="tab-mitra-monitoring-content" class="tab-content active">
+        <div class="content-header">
+          <h2>📈 Monitoring Produktivitas Mustahik</h2>
+          <p>Pantau pertumbuhan tonase panen riil mustahik binaan di wilayah regional Aceh.</p>
+        </div>
+        <div class="transparency-stats">
+          <div class="stat-card"><div class="stat-icon">🌾</div><p class="stat-label">Total Laporan</p><p class="stat-value" id="mitra-stat-laporan">0</p></div>
+          <div class="stat-card"><div class="stat-icon">⚖️</div><p class="stat-label">Total Tonase</p><p class="stat-value text-success" id="mitra-stat-tonase">0 Kg</p></div>
+          <div class="stat-card"><div class="stat-icon">💵</div><p class="stat-label">Total Pendapatan</p><p class="stat-value text-success" id="mitra-stat-pendapatan">Rp 0</p></div>
+          <div class="stat-card"><div class="stat-icon">♻️</div><p class="stat-label">Total Zakat Return</p><p class="stat-value text-warning" id="mitra-stat-zakat">Rp 0</p></div>
+        </div>
+        <div class="glass-card-inside">
+          <p style="font-size:0.72rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:14px;">Grafik Tonase Panen (Kg)</p>
+          <div id="chart-container">
+            <div id="chart-empty" class="empty-state"><p>Grafik muncul setelah mustahik mengirim laporan pertama.</p></div>
+          </div>
+        </div>
+        <div class="blockchain-inspector">
+          <div class="inspector-header">
+            <h3>🔗 Blockchain Logs — Mitra View</h3>
+            <span class="pulse-icon"></span>
+          </div>
+          <div class="logs-container" id="logs-mitra">
+            <div class="log-entry system">[MITRA]: Monitoring panel initialized.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: DATA MUSTAHIK BINAAN -->
+      <div id="tab-mitra-mustahik-content" class="tab-content">
+        <div class="content-header">
+          <h2>👥 Data Mustahik Binaan</h2>
+          <p>Mustahik yang telah menerima modal dan aktif dalam program Z-Chain.</p>
+        </div>
+        <div id="mitra-mustahik-list"><div class="empty-state"><p>Belum ada mustahik yang menerima penyaluran modal.</p></div></div>
+      </div>
+
+      <!-- TAB: KEPATUHAN ZAKAT -->
+      <div id="tab-mitra-zakat-content" class="tab-content">
+        <div class="content-header">
+          <h2>♻️ Kepatuhan Zakat Return</h2>
+          <p>Status pengembalian siklus dana zakat produktif di wilayah regional Aceh.</p>
+        </div>
+        <div id="mitra-zakat-list"><div class="empty-state"><p>Belum ada data zakat return.</p></div></div>
+      </div>
+
+    </section>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
